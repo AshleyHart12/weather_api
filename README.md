@@ -1,1 +1,1 @@
-# weather_api
+# weather_app

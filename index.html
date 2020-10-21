@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <title>Weather App</title>
+        <script type='text/javascript' src='script.js'></script>
+        <style>
+            body{
+                background-color: black;
+                color: white;
+                text-align: center;    
+                }
+                img{
+                    width: 20rem;
+                }
+                input{
+                    background: transparent;
+                    border: none;
+                    border-bottom: 2px solid white;
+                    outline:none;
+                    color: white;
+                    font-size: 20px;
+                    text-align: center;
+                }
+
+                button{
+                    background-color: white;
+                    width: 5rem;
+                    height: 2rem;
+                    border-radius: 10px;
+                    outline: none;
+                    cursor: pointer;
+                    margin: 1rem;
+                }
+                h3, p{
+                    font-size: 35px;
+                }
+                /* #temperature{
+                    display: block;
+                    
+                } */
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <div>
+                <h1>What's the weather</h1>
+                <input type='text' id="input" />
+                <button onclick='search()'>Search</button>
+            </div>
+            <div id='temperature'>
+                <p id='temp'></p>
+                <p id='description'></p>
+                <img src='https://media0.giphy.com/media/MBNaeXPprs8lBb4fjQ/giphy.gif' id='image' placeholder='enter city' />
+            </div>
+        </div>
+        <script>
+            var mykey = config.MY_KEY;
+
+            function search(){
+                let userInput = document.getElementById('input').value;
+    
+                fetch('https://api.openweathermap.org/data/2.5/weather?q='+ userInput + '&units=imperial&appid=' + mykey).then(function(response) {
+                if (response.ok){
+                    return response.json()
+                } else {
+                    return Promise.reject(response);
+                }
+            }).then(function(data) {
+                console.log(data);
+                let weatherID = data.weather[0].icon;
+                document.getElementById('temp').innerHTML = "Temperature: " + data.main.temp + " F";
+                document.getElementById('description').innerHTML = data.weather[0].description;
+                if(data.weather[0].icon == '02d' || data.weather[0].icon =='03d' || data.weather[0].icon =='04d'){
+                    document.getElementById('image').src = 'https://cdn2.microscopesinternational.com/images/weather/v2/@224/day/mostly-cloudy.gif';
+                } else if (data.weather[0].icon ==' 09n' || data.weather[0].icon =='11d' || data.weather[0].icon =='10d'){
+                    document.getElementById('image').src = 'https://lh3.googleusercontent.com/proxy/Dg68D73ru_b6Jpxi4tvLoBkfpqRYFkQcs3lK7BzTJ5hWmsO_wwDJ8JZnAtS_xlp-_YXlofgbZnXSIBScQd8ZhAm5n4yd-6RCkjdYXc8';
+                } else if (data.weather[0].icon =='01d'){
+                    document.getElementById('image').src = 'https://media1.giphy.com/media/iJDxlHRIPA8ciYY55Q/giphy.gif'
+                } else if (data.weather[0].icon =='13d'){
+                    document.getElementById('image').src = 'https://www.animationsoftware7.com/img/agifs/snow01.gif'
+                } else if (data.weather[0].icon =='50d'){
+                    document.getElementById('image').src ='https://data.whicdn.com/images/326178787/original.gif'
+                }
+            }).catch(function(error){
+                console.log(error);
+            })
+            }
+
+
+        </script>
+    </body>
+</html>
